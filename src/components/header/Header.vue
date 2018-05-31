@@ -3,7 +3,7 @@
   <div class="header">
     <div class="content-wrapper">
       <div class="avatar">
-        <img :src="seller.avatar" alt="">
+        <img :src="seller.avatar" alt="avatar" width="64"   height="64">
       </div>
       <div class="content">
         <div class="title">
@@ -15,11 +15,12 @@
         </div>
         <div class="supports" v-if="seller.supports">
           <span class="icon" :class="classMap[seller.supports[0].type]"></span>
-          <span>{{seller.supports[0].description}}</span>
-          <div class="support-cout" @click="showDetail">
-            <span>{{seller.supports.length}}个</span>
-          </div>
+          <span class="text">{{seller.supports[0].description}}</span>
         </div>
+      </div>
+      <div class="support-cout" @click="showDetail" v-if="seller.supports">
+       <span class="count">{{seller.supports.length}}个</span>
+       <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
     <div class="bulletin-wrapper" @click="showDetail">
@@ -75,7 +76,7 @@
 
 </script>
 <style lang="scss">
-@import '../../assets/index.scss';
+@import '../../assets/scss/index.scss';
   .header {
     color: #fff;
     background:rgba(7,17,17,0.5);
@@ -95,22 +96,28 @@
     }   
     .content-wrapper {
       padding:24px 12px 18px 24px;
+      font-size:0;
+      position:relative;
       .avatar {
         display: inline-block;
+        vertical-align: top;
         img {
           border-radius:2px;
           display: block;
-          width:64px;
-          height:64px;
         }
       }
       .content {
         display:inline-block;
         margin-left:16px;
-        font-size:16px;
+        font-size:0;
         .supports {
+          .text {
+            line-height: 12px;
+            font-size:10px;  
+          }
           .icon {
             display: inline-block;
+            vertical-align: top;
             width:12px;
             height:12px;
             margin-right:4px;
@@ -132,6 +139,7 @@
               @include bg-image('special_1');
             }
           }
+          
         }  
         .description {
           font-size:12px;
@@ -155,6 +163,27 @@
             font-weight:bold;
             line-height: 18px;
           }
+        }
+      }
+      .support-cout {
+        position:absolute;
+        right:12px;
+        bottom:18px;
+        padding:0 8px;
+        height:24px;
+        line-height:24px;
+        border-radius:14px;
+        background:rgba(0,0,0,.2);
+        text-align: center;
+        vertical-align: top;
+        .count {
+          font-size:10px;
+        }
+        .icon-keyboard_arrow_right {
+          font-size:10px;
+          line-height:24px;
+          margin-left:2px;
+      
         }
       }
   }

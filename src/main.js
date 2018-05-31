@@ -4,6 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueResource from 'vue-resource'
+import 'normalize.css'
+import './assets/scss/index.scss'
 
 
 Vue.config.productionTip = false

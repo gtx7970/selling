@@ -18,7 +18,7 @@ export default {}
   
 </script>
 <style lang='scss'>
-  @import '../../assets/index.scss';
+  @import '../../assets/scss/index.scss';
   .tab {
     display: flex;
     width:100%;

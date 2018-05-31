@@ -7,6 +7,7 @@
 </template>
 
 <script>
+// import 'normalize.css'
 import Header from './components/header/Header'
 import Tab from './components/tab/Tab'
 
@@ -14,7 +15,7 @@ export default {
   name: 'App',
   data() {
     return {
-      seller:{}    //
+      seller:{}    //  
     }
   },
   created() {
