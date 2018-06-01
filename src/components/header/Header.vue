@@ -327,8 +327,6 @@
                 background-size:16px 16px;
                 background-repeat: no-repeat;
                 @include icon(2);
-              
-
               }
             }
 
