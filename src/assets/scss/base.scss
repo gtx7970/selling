@@ -21,6 +21,17 @@ body,html {
   font-weight: 200;
   font-family: 'PingFang SC', 'STHeitiSC-Light','Helvetica-Light';
 }
+.clearfix {
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+    height:0;
+    line-height:0;
+    visibility: hidden;
+
+  }
+}
 
   
 

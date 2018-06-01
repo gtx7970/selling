@@ -17,3 +17,24 @@
         background-image: url($url + "@3x.png");
     }
 }
+
+@mixin icon($id) {
+  &.decrease {
+    @include bg-image('decrease_'+$id);
+  }
+  &.discount {
+    @include bg-image('discount_'+$id);
+
+  }
+  &.guarantee {
+    @include bg-image('guarantee_'+$id);
+
+  }
+  &.invoice {
+    @include bg-image('invoice_'+$id);
+
+  }
+  &.special {
+    @include bg-image('special_'+$id);
+  }
+}

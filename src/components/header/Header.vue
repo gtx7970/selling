@@ -3,7 +3,7 @@
   <div class="header">
     <div class="content-wrapper">
       <div class="avatar">
-        <img :src="seller.avatar" alt="avatar" width="64"   height="64">
+        <img :src="seller.avatar" alt="avatar" width="64" height="64">
       </div>
       <div class="content">
         <div class="title">
@@ -25,30 +25,49 @@
     </div>
     <div class="bulletin-wrapper" @click="showDetail">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
-      <i class="icon-arrow-right">a</i>
+      <i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
       <img :src="seller.avatar">
     </div>
-    <div v-show="detailShow" class="detail">
-      <div class="detail-wrapper">
-        <div class="detail-main">
-          <h1 class="name">{{seller.name}}</h1>
-          <div class="star-wrapper">
-            <star :score="seller.score" :size="48"></star>
+    <transition name="fade">
+      <div v-show="detailShow" class="detail">
+        <div class="detail-wrapper clearfix">
+          <div class="detail-main">
+            <h1 class="name">{{seller.name}}</h1>
+            <div class="star-wrapper">
+              <star :size="48" :score="seller.score" />
+            </div>
+            <div class="star-wrapper">
+            </div>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+            <ul v-if="seller.supports" class="supports">
+              <li v-for="(item,index) in seller.supports" :key="index" class="support-item">
+                <span class="icon" :class="classMap[index]"></span>
+                <span class="text">{{item.description}}</span>  
+              </li>
+            </ul>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+            <div class="bulletin">
+              <p class="content">{{seller.bulletin}}</p>
+            </div>
+            
+
           </div>
-          <div class="title">
-            <div class="line"></div>
-            <div class="text">优惠信息</div>
-            <div class="line"></div>
-          </div>
-          <ul>
-            <li v-for="item in seller.supports"></li>
-          </ul>
+        </div>
+        <div class="deatail-close" @click="hideDetail">
+          <i class="icon-close"></i>
         </div>
       </div>
-      <div class="deatail-close"></div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -64,6 +83,9 @@
     methods: {
       showDetail() {
         this.detailShow = true
+      },
+      hideDetail(){
+        this.detailShow = false
       }
     },
     components: {
@@ -79,8 +101,9 @@
 @import '../../assets/scss/index.scss';
   .header {
     color: #fff;
-    background:rgba(7,17,17,0.5);
+    background:rgba(7,17,27,0.5);
     position: relative;
+    overflow: hidden;
     .background {
       position: absolute;
       width:100%;
@@ -123,21 +146,22 @@
             margin-right:4px;
             background-size:12px 12px;
             background-repeat: no-repeat;
-            &.decrease {
-              @include bg-image('decrease_1');
-            }
-            &.discount {
-              @include bg-image('discount_1');
-            }
-            &.guarantee {
-              @include bg-image('guarantee_1');
-            }
-            &.invoice {
-              @include bg-image('invoice_1');
-            }
-            &.special {
-              @include bg-image('special_1');
-            }
+            // &.decrease {
+            //   @include bg-image('decrease_1');
+            // }
+            // &.discount {
+            //   @include bg-image('discount_1');
+            // }
+            // &.guarantee {
+            //   @include bg-image('guarantee_1');
+            // }
+            // &.invoice {
+            //   @include bg-image('invoice_1');
+            // }
+            // &.special {
+            //   @include bg-image('special_1');
+            // }
+            @include icon(1);
           }
           
         }  
@@ -162,6 +186,11 @@
             margin-left:6px;
             font-weight:bold;
             line-height: 18px;
+          }
+          .star-wrapper {
+            margin:18px;
+            padding: 2px 0;
+            text-align:center;
           }
         }
       }
@@ -197,12 +226,12 @@
         text-overflow: ellipsis;
         background: rgba(7,17,27,0.2);
         .bulletin-title {
-          margin-top:7px;
+          margin-top:8px;
           vertical-align: top;
           display: inline-block;
           width:22px;
           height:12px;
-          @include bg-image('brand');
+          @include bg-image('bulletin');
           background-size: 22px 12px;
           background-repeat: no-repeat;
         }
@@ -211,7 +240,7 @@
           font-size: 10px;
           margin:0 4px ;
         }
-        .icon-arrow-right {
+        .icon-keyboard_arrow_right {
           position: absolute;
           font-size:10px;
           right:12px;
@@ -223,16 +252,37 @@
       overflow: auto;
       width:100%;
       height:100%;
-      background:rgba(7,17,27,0.8);
       z-index:100;
       top:0;
       left:0;
+      background:rgba(7,17,27,0.8);
+      backdrop-filter: blur(10px);
+      &.fade-enter,&.fade-leave-to{
+        opacity: 0; 
+      }
+      &.fade-enter-active,&.fade-leave-active {
+        transition: all 1s ease;
+      }
+      // &.fade-leave-to {
+      //   opacity: 1;
+      //   background:rgba(7,17,27,0.8);
+      // }
+     
+      // &.fade-leave-active {
+      //   transition: all .3s ease;
+      // }
+      
       .detail-wrapper {
         min-height:100%;
+        width:100%;
         .detail-main {
+          margin-top:64px;
+          padding-bottom: 64px;
           .name {
             line-height:16px;
             text-align:center;
+            font-size:16px;
+            font-weight: 700;
           }
           .star-wrapper {
             text-align:center;
@@ -240,7 +290,7 @@
           .title {
             display: flex;
             width:80%;
-            margin:30px auto 24px auto;
+            margin:28px auto 24px auto;
             .line {
               flex:1;
               border-bottom:1px solid rgba(255,255,255,0.2);
@@ -253,7 +303,54 @@
               font-size:14px;
             }
           }
+          .supports {
+            width:80%;
+            margin:0 auto;
+            .support-item {
+              padding:0 12px;
+              margin-bottom: 12px;
+              font-size:0;
+              &:last-child {
+                margin-bottom: 0;
+              }
+              .text {
+                line-height:16px;
+                font-size:12px;
+              }
+              .icon {
+                vertical-align: top;
+                display: inline-block;
+                width:16px;
+                height: 16px;
+                // line-height: 16px;
+                margin-right:6px;
+                background-size:16px 16px;
+                background-repeat: no-repeat;
+                @include icon(2);
+              
+
+              }
+            }
+
+          }
+          .bulletin {
+            width:80%;
+            margin:0 auto;
+            .content {
+              padding:0 12px;
+              line-height:24px;
+              font-size:12px;
+            }
+          }
         }
+      }
+      .deatail-close {
+        position: relative;
+        width:32px;
+        height:32px;
+        margin:-64px  auto 0 auto;
+        clear: both;
+        font-size:32px;
       }
     }
   }
