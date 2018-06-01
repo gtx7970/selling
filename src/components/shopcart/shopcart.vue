@@ -5,27 +5,24 @@
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo">
-            <span class="icon-shop-cart"></span>
+            <i class="icon-shopping_cart"></i>
           </div>
-          <div class="price">{{minPrice}}</div>
-          <div class="des">{{deliveryPrice}}</div>
+        </div>
+        <div class="price">0元</div>
+        <div class="des">另需配送费￥{{deliveryPrice}}元</div>
+      </div>
+      <div class="content-right">
+        <div class="pay">
+          ￥{{minPrice}}起送
         </div>
       </div>
-      <div class="content-right"></div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    minPrice: {
-      type:Number
-    },
-    deliveryPrice:{
-      type:Number
-    }
-  },
+  props:['deliveryPrice','minPrice'],
   computed: {
     totalPrice() {
       
@@ -34,6 +31,7 @@ export default {
 };
 </script>
 <style lang='scss'>
+@import '../../assets/scss/index.scss';
 .shopcart {
   width: 100%;
   position: fixed;
@@ -44,7 +42,10 @@ export default {
   .content {
     display: flex;
     background: #141d27;
+    font-size:0;
+    color:rgba(255,255,255,0.4);
     .content-left {
+      vertical-align: top;
       flex: 1;
       .logo-wrapper {
         display: inline-block;
@@ -53,31 +54,55 @@ export default {
         width:56px;
         position: relative;
         top:-10px;
+        margin:0 12px;
+        padding:6px;
+        box-sizing: border-box;
+        vertical-align: top;
         background: #141d27;
         .logo {
-            width:100%;
-            height:100%;
-            border-radius:50%;
-            background: #2b343c;
+          width:100%;
+          height:100%;
+          border-radius:50%;
+          background: #2b343c;
+          text-align: center;
+          .icon-shopping_cart {
+            font-size:24px;
+            color:#80858a;
+            line-height:44px;
+          }
         }
 
       }
       .price {
+        vertical-align: top;
         display: inline-block;
         line-height:24px;
-        margin-top:24px;
+        margin-top:12px;
+        padding-right:12px;
         box-sizing: border-box;
-        color:rgba(255,255,255,0.4);
+        border-right:1px solid rgba(255,255,255,0.4);
+        font-size: 16px;
+        font-weight:700;
       }
       .des {
         display: inline-block;
+        vertical-align: top;
         line-height: 24px;
-        color:rgba(255,255,255,0.4);
+        margin:12px 0 0 12px;
+        font-size:10px;
       }
     }
     .content-right {
       flex: 0 0 105px;
       width: 105px;
+      .pay {
+        font-size:12px;
+        line-height:48px;
+        height:48px;
+        text-align: center;
+        font-weight: 700;
+        background: #2b333b;
+      }
     }
   }
 }
