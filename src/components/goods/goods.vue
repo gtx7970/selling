@@ -3,7 +3,8 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul class="items">
-        <li v-for="(item,index) in goods" class="menu-item" :key="index">
+        <li v-for="(item,index) in goods" class="menu-item" :key="index" :class="{'current':currentIndex===index}"
+        @click="selectMenu(index,$event)">
           <span class="text" >
             <iconclass v-if="item.type>0" :idx="item.type"/>{{item.name}}
           </span>
@@ -12,7 +13,7 @@
     </div>
     <div class="foods-wrapper" ref="foodsWrapper">
       <ul class="food-lists">
-        <li v-for="item in goods" class="food-list">
+        <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="food in item.foods" class="food-item">
@@ -23,8 +24,7 @@
                 <h2 class="name">{{food.name}}</h2>
                 <p class="des">{{food.description}}</p>
                 <div class="extra">
-                  <span class="count">月售{{food.sellCount}}</span>
-                  <span>好评率{{food.rating}}</span>
+                  <span class="count">月售{{food.sellCount}}</span><span>好评率{{food.rating}}</span>
                 </div>
                 <div class="price">
                   <span class="now">￥{{food.price}}</span>
@@ -52,7 +52,9 @@ const ERROR_OK = 0
 export default {
   data() {
     return {
-      goods: []
+      goods: [],
+      listHeight:[],
+      scrollY:0
     }
   },
   props:['seller'],
@@ -67,17 +69,51 @@ export default {
         this.goods = response.body.data
         this.$nextTick(() => {
           this._initScroll()
+          this._calcHeight()
         })
       }
     })
   },
+  computed:{
+    currentIndex(){
+      for(let i=0;i<this.listHeight.length;i++){
+        let height1 = this.listHeight[i]
+        let height2 = this.listHeight[i+1]
+        if(!height2 || (this.scrollY>=height1 && this.scrollY<height2)){
+          return i
+        }
+      }
+      return 0
+    }
+  },
   methods: {
     _initScroll() {
-      this.menuScroll = new BScroll(this.$refs.menuWrapper)
-      this.foodScroll = new BScroll(this.$refs.foodsWrapper)
+      this.menuScroll = new BScroll(this.$refs.menuWrapper,{
+        click:true
+      })
+      this.foodScroll = new BScroll(this.$refs.foodsWrapper,{
+        probeType:3
+      })
+      this.foodScroll.on('scroll',(pos)=>{
+        this.scrollY = Math.abs(Math.round(pos.y))
+      })
     },
     _calcHeight(){
-
+      let foodList = this.$refs.foodsWrapper.querySelectorAll('.food-list-hook')
+      let height = 0
+      this.listHeight.push(height) //[0]
+      for(let i=0;i<foodList.length;i++){
+        let item = foodList[i]
+        height += item.clientHeight
+        this.listHeight.push(height)
+      }
+    },
+    selectMenu(index,event){
+      if(!event._constructed) return
+      let foodList = this.$refs.foodsWrapper.querySelectorAll('.food-list-hook')
+      let el = foodList[index]
+      this.foodScroll.scrollToElement(el,300)
+      console.log(index)
     }
   }
 };
@@ -102,7 +138,15 @@ export default {
           width: 56px;
           line-height: 14px;
           padding:0 12px;
+          &.current {
+            position: relative;
+            margin-top:-1px;
+            font-weight: 700;
+            background: #fff;
+            z-index:10;
+          }
           .text {
+            border:none;
             display: table-cell;
             font-size: 12px;
             width:56px;
@@ -116,6 +160,7 @@ export default {
     .foods-wrapper {
       flex: 1;
       .title {
+        margin-top:0;
         padding-left: 14px;
         height: 26px;
         line-height: 16px;
@@ -153,6 +198,7 @@ export default {
           }
           .des {
             margin-bottom: 8px;
+            line-height:12px;
           }
           .extra {
             .count {
