@@ -257,8 +257,9 @@
       left:0;
       background:rgba(7,17,27,0.8);
       backdrop-filter: blur(10px);
-      &.fade-enter,&.fade-leave-to{
+      &.fade-enter,&.fade-leave-active{
         opacity: 0; 
+        background:rgba(7,17,27,0);
       }
       &.fade-enter-active,&.fade-leave-active {
         transition: all 1s ease;

@@ -7,6 +7,7 @@
           <div class="logo">
             <i class="icon-shopping_cart"></i>
           </div>
+          <div class="num">1</div>
         </div>
         <div class="price">0元</div>
         <div class="des">另需配送费￥{{deliveryPrice}}元</div>
@@ -65,11 +66,33 @@ export default {
           border-radius:50%;
           background: #2b343c;
           text-align: center;
+          &.highlight {
+            background: gba(0,160,220);
+          }
           .icon-shopping_cart {
             font-size:24px;
             color:#80858a;
             line-height:44px;
+            &.highlight {
+              color:#fff;
+            }
           }
+        }
+        .num {
+          position: absolute;
+          top:0;
+          right:0;
+          width:24px;
+          height:16px;
+          line-height: 16px;
+          text-align: center;
+          border-radius:16px;
+          font-size:9px;
+          font-weight:700;
+          color:#fff;
+          background: rgb(240,24,0);
+          box-shadow: 0 4px 8px 0 rgba(0,0,0,.4);
+
         }
 
       }
@@ -83,6 +106,9 @@ export default {
         border-right:1px solid rgba(255,255,255,0.4);
         font-size: 16px;
         font-weight:700;
+        &.highlight {
+          color: #fff;
+        }
       }
       .des {
         display: inline-block;

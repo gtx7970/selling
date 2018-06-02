@@ -30,7 +30,7 @@
                   <span class="now">￥{{food.price}}</span>
                   <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                 </div>
-                <div class="cartcon">
+                <div class="cart-wrapper">
                   <cartbtn :food="food"></cartbtn>
                 </div>
               </div>
@@ -92,7 +92,8 @@ export default {
         click:true
       })
       this.foodScroll = new BScroll(this.$refs.foodsWrapper,{
-        probeType:3
+        probeType:3,
+        click:true
       })
       this.foodScroll.on('scroll',(pos)=>{
         this.scrollY = Math.abs(Math.round(pos.y))
@@ -219,7 +220,14 @@ export default {
               color: rgb(147, 153, 159);
             }
           }
+          .cart-wrapper {
+              position: absolute;
+              right:0;
+              bottom:12px;
+            }
         }
+        
+
       }
     }
   }
