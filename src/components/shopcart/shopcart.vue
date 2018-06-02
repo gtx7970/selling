@@ -1,6 +1,7 @@
 <!--  -->
 <template>
   <div class="shopcart">
+    <!-- {{selectFood}} -->
     <div class="content">
       <div class="content-left">
         <div class="logo-wrapper">
@@ -23,12 +24,12 @@
 
 <script>
 export default {
-  props:['deliveryPrice','minPrice'],
-  data(){
-    return {
-      selectFood:[{price:10,count:0}]
-    }
-  },
+  props:['deliveryPrice','minPrice','selectFood'],
+  // data(){
+  //   return {
+  //     selectFood:[{price:10,count:0}]
+  //   }
+  // },
   computed: {
     totalPrice() {   //总价
       let total = 0
