@@ -73,6 +73,7 @@ export default {
         })
       }
     })
+    
   },
   computed:{
     currentIndex(){
@@ -127,7 +128,8 @@ export default {
       this.foodScroll.scrollToElement(el,300)
       console.log(index)
     }
-  }
+  },
+
 };
 </script>
 <style lang='scss'>
