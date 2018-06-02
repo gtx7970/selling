@@ -4,17 +4,17 @@
     <div class="content">
       <div class="content-left">
         <div class="logo-wrapper">
-          <div class="logo">
-            <i class="icon-shopping_cart"></i>
+          <div class="logo" :class="{'highlight':totalCount>0}">
+            <i class="icon-shopping_cart" :class="{'highlight':totalCount>0}"></i>
           </div>
-          <div class="num">1</div>
+          <div class="num" v-show="totalCount>0">{{totalCount}}</div>
         </div>
-        <div class="price">0元</div>
-        <div class="des">另需配送费￥{{deliveryPrice}}元</div>
+        <div class="price" :class="{'highlight':totalCount>0}">￥{{totalPrice}}</div>
+        <div class="des">配送费￥{{deliveryPrice}}元</div>
       </div>
       <div class="content-right">
-        <div class="pay">
-          ￥{{minPrice}}起送
+        <div class="pay" :class="payclass">
+          {{paydes}}
         </div>
       </div>
     </div>
@@ -24,9 +24,42 @@
 <script>
 export default {
   props:['deliveryPrice','minPrice'],
+  data(){
+    return {
+      selectFood:[{price:10,count:0}]
+    }
+  },
   computed: {
-    totalPrice() {
-      
+    totalPrice() {   //总价
+      let total = 0
+      this.selectFood.forEach(food => {
+        total += food.price * food.count
+      })
+      return total
+    },
+    totalCount() {
+      let num = 0
+      this.selectFood.forEach(food => {
+        num += food.count
+      })
+      return num
+    },
+    paydes(){
+      if(this.totalPrice === 0){
+        return `￥${this.minPrice}`
+      }else if(this.totalPrice < this.minPrice){
+        let diff = this.minPrice - this.totalPrice
+        return `还差￥${diff}起送`
+      }else {
+        return '去结算'
+      }
+    },
+    payclass(){
+      if(this.totalPrice < this.minPrice){
+        return 'not-enough'
+      }else {
+        return 'enough'
+      }
     }
   }
 };
@@ -67,7 +100,7 @@ export default {
           background: #2b343c;
           text-align: center;
           &.highlight {
-            background: gba(0,160,220);
+            background: rgb(0,160,220);
           }
           .icon-shopping_cart {
             font-size:24px;
@@ -92,7 +125,6 @@ export default {
           color:#fff;
           background: rgb(240,24,0);
           box-shadow: 0 4px 8px 0 rgba(0,0,0,.4);
-
         }
 
       }
@@ -127,7 +159,13 @@ export default {
         height:48px;
         text-align: center;
         font-weight: 700;
-        background: #2b333b;
+        &.not-enough {
+          background: #2b333b;
+        }
+        &.enough {
+          background: #00b43c;
+          color:#fff;
+        }
       }
     }
   }
