@@ -23,6 +23,34 @@
           </div>
           <div class="buy" v-show="!food.count || food.count===0" @click="addfirst($event)">加入购物车</div>
         </div>
+        <split v-show="food.info"/>
+        <div class="info" v-show="food.info">
+          <h1 class="title">商品信息</h1>
+          <p class="text">{{food.info}}</p>
+        </div>
+        <split />
+        <div class="rating">
+          <div class="title">商品评价</div>
+          <ratingselect :selectType="selectType" 
+          :onlyContent="onlyContent" :desc="desc" :ratings="food.ratings"/>
+          <div class="rating-wrapper">
+            <ul v-show="food.ratings && food.ratings.length>0">
+              <li v-for="rating in food.ratings" class="rating-item">
+                <div class="user">
+                  <span class="name">{{rating.username}}</span>
+                  <img :src="rating.avatar"  class="avatar" width="12" height="12">
+                </div>
+                <div class="time">{{rating.rateTime | formatDate}}</div>
+                <p class="text">
+                  <span :class="{'icon-thumb_up':rating.rateType===0,
+                  'icon-thumb_down':rating.rateType===1}"></span>
+                  {{rating.text}}
+                </p>
+              </li>
+            </ul>
+            <div class="no-ratings" v-show="!food.ratings || !food.ratings.length"></div>
+          </div>
+        </div>
         
       </div>
     </div>
@@ -33,19 +61,36 @@
 import Vue from 'vue'
 import BScroll from "better-scroll";
 import cartbtn from "../../components/cartbtn/cartbtn"
+import split from "../../components/split/split"
+import ratingselect from "../../components/ratingselect/ratingselect"
+import {formatDates} from "../../js/date.js"
+const POSITIVE = 0;
+const NEGATIVE = 1;
+const ALL = 2;
 export default {
   props:['food'],
   components:{
-    cartbtn
+    cartbtn,
+    split,
+    ratingselect
   },
   data(){
     return {
-      showFood:false
+      showFood:false,
+      selectType:ALL,
+      onlyContent:true,
+      desc:{
+        all:'全部',
+        positive:'推荐',
+        negative:'吐槽'
+      }
     }
   },
   methods:{
     show() {
       this.showFood = true
+      this.selectType = ALL
+      this.onlyContent = true;
       this.$nextTick(() => {
         if(!this.scroll){
           this.scroll = new BScroll(this.$refs.foodcontent,{
@@ -62,6 +107,12 @@ export default {
     addfirst(event){
       if(!event._constructed) return
       Vue.set(this.food,'count',1)
+    }
+  },
+  filters: {
+    formatDate(time){
+      let date = new Dtae(time)
+
     }
   }
 }
@@ -166,6 +217,78 @@ export default {
           border-radius: 12px;
           color:#fff;
           background:rgb(0,160,220);
+        }
+      }
+      .info {
+        padding: 18px;
+        .title {
+          font-size:14px;
+          color:rgb(7,17,27);
+          margin-bottom: 6px;
+          line-height: 14px;
+        }
+        .text {
+          line-height: 24px;
+          padding:0 8px;
+          font-size:12px;
+          color:rgb(77,83,95);
+        }
+      }
+      .rating {
+        padding-top:18px;
+        .title {
+          font-size:14px;
+          color:rgb(7,17,27);
+          margin-left: 18px;
+          line-height: 14px;
+        }
+        .rating-wrapper {
+          padding:0 18px;
+          .rating-item {
+            position: relative;
+            padding:16px 0;
+            @include border-1px(rgba(7,17,27,0.1));
+            .user {
+              position: absolute;
+              top:16px;
+              right:0;
+              font-size:0;
+              line-height:12px;
+              .name {
+                display: inline-block;
+                font-size:10px;
+                vertical-align: top;
+                color:rgb(147,153,155);
+                margin-right:6px;
+              }
+              .avatar {
+                border-radius:50%;
+              }
+            }
+            .time {
+              margin:6px;
+              font-size:10px;
+              line-height:12px;
+              color:rgb(147,153,155);
+            }
+            .text {
+              font-size:12px;
+              line-height:16px;
+              color:rgb(7,17,27);
+              .icon-thumb_up,.icon-thumb_down {
+                margin-right:4px;
+                line-height:24px;
+                font-size:12px;
+              }
+              .icon-thumb_up {
+                color:rgb(0,160,220);
+              }
+              .icon-thumb_down {
+                color:rgb(147,153,159);
+              }
+            }
+          }
+          
         }
       }
       

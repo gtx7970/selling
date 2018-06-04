@@ -48,6 +48,26 @@ export default {
       display: inline-block;
       background-repeat: no-repeat;
     }
+    &.star_36{
+      .star-item {
+        width:15px;
+        height:15px;
+        margin-right:6px;
+        background-size: 15px 15px;
+        &.on {
+          @include bg-image('star36_on');
+        }
+        &.off {
+          @include bg-image('star36_off');
+        }
+        &.half {
+          @include bg-image('star36_half');
+        }
+        &:last-child {
+          margin-right:0;
+        }
+      }
+    }
     &.star_48 {
       .star-item {
         width:20px;
@@ -68,27 +88,7 @@ export default {
         }
       }
     }
-    &.star_36{
-      star-item {
-        width:15px;
-        height:15px;
-        margin-right:16px;
-        background-size: 15px 15px;
-        &.on {
-          @include bg-image('star36_on');
-        }
-        &.off {
-          @include bg-image('star36_off');
-        }
-        &.half {
-          @include bg-image('star36_half');
-        }
-        &:last-child {
-          margin-right:0;
-        }
-      }
-
-    }
+   
     &.star_24{
       .star-item {
         width:10px;
