@@ -26,7 +26,7 @@ export default {
       }else {
         this.food.count++
       }
-      this.$emit('cart.add',event.target)
+      this.$emit('addball',event.target) //向外传递dom对象
     },
     removeCart(){
       if(!event._constructed) return

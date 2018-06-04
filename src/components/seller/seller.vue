@@ -28,6 +28,10 @@
             </div>
           </li>
         </ul>
+        <div class="collect" @click="toggleCollect">
+          <span class="icon-favorite" :class="{'active':favorite}"></span>
+          <span class="text">{{favoriteText}}</span>
+        </div>
       </div>
       <split/>
       <div class="bulletin">
@@ -73,10 +77,26 @@ import split from "../../components/split/split"
 import iconclass from '../../components/iconclassmap/iconclass'
 export default {
   props:['seller'],
+  data() {
+    return {
+      favorite:false
+    }
+  },
+  computed: {
+    favoriteText(){
+      return this.favorite ? '已收藏' : '收藏'
+    }
+  },
   components:{
     star,
     split,
     iconclass
+  },
+  methods: {
+    toggleCollect(event){
+      if(!event._constructed) return
+      this.favorite = !this.favorite
+    }
   },
   mounted(){
     console.log(this.seller)
@@ -113,6 +133,7 @@ export default {
     overflow: hidden;
     .overview {
       padding:18px;
+      position: relative;
       .title {
         margin-bottom:8px;
         line-height: 14px;
@@ -160,6 +181,30 @@ export default {
           }
 
         }
+      }
+      .collect {
+        position: absolute;
+        right:7px;
+        top:18px;
+        text-align:center;
+        width:50px;
+        .icon-favorite {
+          display: block;
+          margin-bottom:4px;
+          line-height:24px;
+          font-size:24px;
+          color:#d4d6d9;
+          &.active {
+            color:rgb(240,20,20);
+          }
+        }
+        .text {
+          font-size:10px;
+          line-height:10px;
+          color:rgb(77,85,93);
+        }
+
+
       }
     }
     .bulletin {

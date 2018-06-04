@@ -21,10 +21,10 @@
         </div>
       </div>
       <div class="ball-container">
-        <div v-for="ball in balls" >
-          <transition name="drop">
-            <div class="ball" v-show="ball.show">
-              <div class="inner"></div>
+        <div v-for="ball in balls">
+          <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+            <div  v-show="ball.show" class="ball">
+              <div class="inner inner-hook"></div>
             </div>
           </transition>
         </div>
@@ -75,6 +75,7 @@ export default {
         {show:false},
         {show:false}
       ],
+      dropBalls:[],
       fold:true  //购物车详情默认是折叠的
     }
   },
@@ -131,6 +132,56 @@ export default {
     }
   },
   methods: {
+    drop(el){
+      console.log(el)
+      for(let i=0;i<this.balls.length;i++){
+        let ball = this.balls[i]
+        if(!ball.show) {
+          ball.show = true //找到隐藏的ball
+          ball.el = el //存储dom的位置
+          this.dropBalls.push(ball)
+          return
+        }
+      }
+    },
+    beforeDrop(el){ // 下落之前,找到所有true的ball
+      let count = this.balls.length
+      while(count--){
+        let ball = this.balls[count]
+        if(ball.show) {
+          let rect = ball.el.getBoundingClientRect()
+          let x = rect.left - 32
+          let y = -(window.innerHeight - rect.top - 22)
+          console.log(x,y)
+          el.style.display = ''
+          el.style.webkitTransform = `translate3d(0,${y}px,0)`;
+          el.style.transform = `translate3d(0,${y}px,0)`;
+          let inner = el.getElementsByClassName('inner-hook')[0];
+          inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
+          inner.style.transform = `translate3d(${x}px,0,0)`;
+        }
+      }
+    },
+    dropping(el){ //下落
+      let rf = el.offsetHeight; //触发浏览器重绘
+      this.$nextTick(() => {
+        el.style.webkitTransform = 'translate3d(0,0,0)';
+        el.style.transform = 'translate3d(0,0,0)';
+        let inner = el.getElementsByClassName('inner-hook')[0];
+        inner.style.webkitTransform = 'translate3d(0,0,0)';
+        inner.style.transform = 'translate3d(0,0,0)';
+        // el.addEventListener('transitionend', done);
+      });
+      
+
+    },
+    afterDrop(el){ //下落后
+      let ball = this.dropBalls.shift();
+        if (ball) {
+          ball.show = false;
+          el.style.display = 'none';
+        }
+    },
     toggleList(){
       if(!this.totalCount) return
       this.fold = !this.fold
@@ -261,11 +312,13 @@ export default {
       left: 32px;
       bottom: 22px;
       z-index:200;
+      transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
       .inner {
         width:16px;
         height:16px;
         border-radius: 50%;
         background: rgb(0,160,220);
+        transition: all 0.4s linear;
       }
     }
   }

@@ -31,7 +31,7 @@
                   <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cart-wrapper">
-                  <cartbtn :food="food"></cartbtn>
+                  <cartbtn :food="food" @addball="addFood"></cartbtn>
                 </div>
               </div>
             </li>
@@ -39,7 +39,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :selectFood="selectFood" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart> 
+    <shopcart ref="shopcart" :selectFood="selectFood" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart> 
     <food :food="selectedFood" ref="food"/>
   </div> 
 </template>
@@ -103,6 +103,14 @@ export default {
     }
   },
   methods: {
+    addFood(target){
+      this._drop(target) //
+    },
+    _drop(target) {
+        this.$nextTick(() => {
+          this.$refs.shopcart.drop(target); //调用子组件的方法
+        });
+    },
     chooseFood(food,event){
       // if(!event._constructed) return
       this.selectedFood = food

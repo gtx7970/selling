@@ -60,6 +60,7 @@
 import star from '../../components/star/star'
 import split from "../../components/split/split"
 import ratingselect from "../../components/ratingselect/ratingselect"
+
 import BScroll from "better-scroll";
 const ERROR_OK = 0
 export default {
@@ -67,7 +68,7 @@ export default {
   components:{
     star,
     split,
-    ratingselect
+    ratingselect,
   },
   data(){
     return {

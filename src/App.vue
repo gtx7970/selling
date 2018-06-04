@@ -2,7 +2,9 @@
   <div id ="app">
     <v-header :seller="seller"></v-header>
     <v-tab></v-tab>
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -15,7 +17,12 @@ export default {
   name: 'App',
   data() {
     return {
-      seller:{}    //  
+      seller:{
+        id:(()=>{
+          let queryParam = urlParse()
+          return queryParam.id
+        })
+      }    //  
     }
   },
   created() {
