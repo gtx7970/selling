@@ -40,7 +40,7 @@
       </ul>
     </div>
     <shopcart ref="shopcart" :selectFood="selectFood" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart> 
-    <food :food="selectedFood" ref="food"/>
+    <food :food="selectedFood" ref="food" @addball="addFood"/>
   </div> 
 </template>
 
@@ -113,8 +113,9 @@ export default {
     },
     chooseFood(food,event){
       // if(!event._constructed) return
+      console.log(food)
       this.selectedFood = food
-      this.$refs.food.show()
+      this.$refs.food.show() //显示详情
     },
     _initScroll() {
       this.menuScroll = new BScroll(this.$refs.menuWrapper,{

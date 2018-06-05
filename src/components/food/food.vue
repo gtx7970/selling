@@ -19,9 +19,11 @@
             <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
           </div>
           <div class="cart-wrapper">
-            <cartbtn :food="food"/>
+            <cartbtn :food="food" @addball="addFood"/>
           </div>
-          <div class="buy" v-show="!food.count || food.count===0" @click="addfirst($event)">加入购物车</div>
+          <transition name="fade">
+            <div class="buy" v-show="!food.count || food.count===0" @click.stop.prevent="addfirst($event)">加入购物车</div>
+          </transition>
         </div>
         <split v-show="food.info"/>
         <div class="info" v-show="food.info">
@@ -31,16 +33,16 @@
         <split />
         <div class="rating">
           <div class="title">商品评价</div>
-          <ratingselect :selectType="selectType" 
-          :onlyContent="onlyContent" :desc="desc" :ratings="food.ratings"/>
+          <ratingselect @changeSelectType="selectRating"  @changeContentType ="toggleContent"
+          :selectType="selectType" :onlyContent="onlyContent" :desc="desc" :ratings="food.ratings"/>
           <div class="rating-wrapper">
-            <ul v-show="food.ratings && food.ratings.length>0">
-              <li v-for="rating in food.ratings" class="rating-item">
+            <ul v-show="food.ratings && food.ratings.length">
+              <li v-for="rating in food.ratings" class="rating-item" v-show="needShow(rating.rateType,rating.text)">
                 <div class="user">
                   <span class="name">{{rating.username}}</span>
                   <img :src="rating.avatar"  class="avatar" width="12" height="12">
                 </div>
-                <div class="time">{{rating.rateTime | formatDate}}</div>
+                <div class="time">{{rating.rateTime}}</div>
                 <p class="text">
                   <span :class="{'icon-thumb_up':rating.rateType===0,
                   'icon-thumb_down':rating.rateType===1}"></span>
@@ -48,10 +50,11 @@
                 </p>
               </li>
             </ul>
-            <div class="no-ratings" v-show="!food.ratings || !food.ratings.length"></div>
+            <div class="no-ratings" v-show="!food.ratings || !food.ratings.length">
+              暂无评价
+            </div>
           </div>
-        </div>
-        
+        </div> 
       </div>
     </div>
   </transition>
@@ -63,10 +66,10 @@ import BScroll from "better-scroll";
 import cartbtn from "../../components/cartbtn/cartbtn"
 import split from "../../components/split/split"
 import ratingselect from "../../components/ratingselect/ratingselect"
-import {formatDates} from "../../js/date.js"
-const POSITIVE = 0;
-const NEGATIVE = 1;
-const ALL = 2;
+// import {formatDates} from "../../js/date.js"
+const POSITIVE = 0; //正面
+const NEGATIVE = 1; //负面
+const ALL = 2;  //所有
 export default {
   props:['food'],
   components:{
@@ -89,7 +92,7 @@ export default {
   methods:{
     show() {
       this.showFood = true
-      this.selectType = ALL
+      this.selectType = ALL //每次show展示所有
       this.onlyContent = true;
       this.$nextTick(() => {
         if(!this.scroll){
@@ -107,14 +110,38 @@ export default {
     addfirst(event){
       if(!event._constructed) return
       Vue.set(this.food,'count',1)
-    }
-  },
-  filters: {
-    formatDate(time){
-      let date = new Dtae(time)
-
+      this.$emit('addball',event.target) //传递事件
+    },
+    addFood(event){
+      this.$emit('addball',event) //传递事件
+    },
+    needShow(type,text){
+      if(this.onlyContent && !text) return false // 判断是否显示内容
+      if(this.selectType === ALL) {
+        return true
+      }else {
+        return type === this.selectType
+      }
+    },
+    selectRating(type){
+      console.log(type)
+      this.selectType = type //接受子组件传递的type
+      this.$nextTick(() => {
+          this.scroll.refresh()
+      });
+    },
+    toggleContent() {
+      this.onlyContent = !this.onlyContent
+      this.$nextTick(() => {
+          this.scroll.refresh()
+      });
     }
   }
+  // filters: {
+  //   formatDate(time){
+  //     let date = new Date(time)
+  //   }
+  // }
 }
 
 </script>
@@ -217,6 +244,13 @@ export default {
           border-radius: 12px;
           color:#fff;
           background:rgb(0,160,220);
+          &.fade-enter-active,&.fade-leave-active {
+            transition: all .5s;
+          }
+          &.fade-enter,&.fade-leave-active {
+            opacity: 0;
+            background:rgba(0,160,220,0);
+          }
         }
       }
       .info {
@@ -287,6 +321,11 @@ export default {
                 color:rgb(147,153,159);
               }
             }
+          }
+          .no-ratings {
+            padding:16px 0;
+            font-size:12px;
+            color:rgb(147,153,159);
           }
           
         }

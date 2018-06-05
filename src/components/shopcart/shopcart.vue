@@ -154,22 +154,22 @@ export default {
           let y = -(window.innerHeight - rect.top - 22)
           console.log(x,y)
           el.style.display = ''
-          el.style.webkitTransform = `translate3d(0,${y}px,0)`;
-          el.style.transform = `translate3d(0,${y}px,0)`;
-          let inner = el.getElementsByClassName('inner-hook')[0];
-          inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
-          inner.style.transform = `translate3d(${x}px,0,0)`;
+          el.style.webkitTransform = `translate3d(0,${y}px,0)`  //外部y轴移动
+          el.style.transform = `translate3d(0,${y}px,0)`        //
+          let inner = el.getElementsByClassName('inner-hook')[0]
+          inner.style.webkitTransform = `translate3d(${x}px,0,0)` // 内部x轴移动
+          inner.style.transform = `translate3d(${x}px,0,0)`
         }
       }
     },
     dropping(el){ //下落
       let rf = el.offsetHeight; //触发浏览器重绘
       this.$nextTick(() => {
-        el.style.webkitTransform = 'translate3d(0,0,0)';
-        el.style.transform = 'translate3d(0,0,0)';
-        let inner = el.getElementsByClassName('inner-hook')[0];
-        inner.style.webkitTransform = 'translate3d(0,0,0)';
-        inner.style.transform = 'translate3d(0,0,0)';
+        el.style.webkitTransform = 'translate3d(0,0,0)'
+        el.style.transform = 'translate3d(0,0,0)'
+        let inner = el.getElementsByClassName('inner-hook')[0]
+        inner.style.webkitTransform = 'translate3d(0,0,0)'
+        inner.style.transform = 'translate3d(0,0,0)'
         // el.addEventListener('transitionend', done);
       });
       
