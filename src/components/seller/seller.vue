@@ -75,6 +75,7 @@ import BScroll from "better-scroll"
 import star from '../../components/star/star'
 import split from "../../components/split/split"
 import iconclass from '../../components/iconclassmap/iconclass'
+import axios from 'axios'
 export default {
   props:['seller'],
   data() {

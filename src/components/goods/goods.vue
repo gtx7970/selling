@@ -50,6 +50,7 @@ import shopcart from "../../components/shopcart/shopcart"
 import cartbtn from "../../components/cartbtn/cartbtn"
 import iconclass from '../../components/iconclassmap/iconclass'
 import food from '../../components/food/food'
+import axios from 'axios'
 const ERROR_OK = 0
 export default {
   data() {
@@ -68,16 +69,13 @@ export default {
     food
   },
   created() {
-    this.$http.get("/api/goods").then(response => {
-      if (response.body.errno === ERROR_OK) {
-        this.goods = response.body.data
-        this.$nextTick(() => {
-          this._initScroll()
-          this._calcHeight()
-        })
-      }
-    })
-    
+    axios.get('./static/data.json').then((res) => {
+      this.goods = res.data.goods
+      this.$nextTick(() => {
+        this._initScroll(); // 初始化scroll
+        this._calcHeight(); // 初始化列表高度列表
+      })
+    });
   },
   computed:{
     currentIndex(){

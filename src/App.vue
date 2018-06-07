@@ -12,6 +12,7 @@
 // import 'normalize.css'
 import Header from './components/header/Header'
 import Tab from './components/tab/Tab'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -26,14 +27,19 @@ export default {
     }
   },
   created() {
-    this.$http.get('/api/seller')
-      .then((response) => {
-        console.log(response)
-        if(response.body.errno === 0) {
-          this.seller = response.body.data
-          console.log(this.seller)
-        }
+    axios.get('./static/data.json')
+      .then(res => {
+        this.seller = res.data.seller
+        console.log(this.seller)
       })
+    // this.$http.get('/api/seller')
+    //   .then((response) => {
+    //     console.log(response)
+    //     if(response.body.errno === 0) {
+    //       this.seller = response.body.data
+    //       console.log(this.seller)
+    //     }
+    //   })
   },
   components:{
     'v-header':Header,

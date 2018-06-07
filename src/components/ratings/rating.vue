@@ -60,8 +60,8 @@
 import star from '../../components/star/star'
 import split from "../../components/split/split"
 import ratingselect from "../../components/ratingselect/ratingselect"
-
 import BScroll from "better-scroll";
+import axios from 'axios'
 const ERROR_OK = 0
 export default {
   props:['seller'],
@@ -76,16 +76,26 @@ export default {
     }
   },
   created() {
-    this.$http.get("/api/ratings").then(response => {
-      if (response.body.errno === ERROR_OK) {
-        this.ratings = response.body.data
+    axios.get('./static/data.json')
+      .then(res => {
+        this.ratings = res.data.ratings
+        this.seller = res.data.seller
         this.$nextTick(() => {
           this.scroll = new BScroll(this.$refs.ratings,{
             click:true
           })
         })
-      }
-    })
+      })
+    // axios.get('data.json').then(response => {
+    //   if (response.body.errno === ERROR_OK) {
+    //     this.ratings = response.body.data
+    //     this.$nextTick(() => {
+    //       this.scroll = new BScroll(this.$refs.ratings,{
+    //         click:true
+    //       })
+    //     })
+    //   }
+    // })
   }
 }
 </script>
