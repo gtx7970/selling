@@ -2,20 +2,13 @@
 
 ## Project setup
 ```
-yarn install
+yarn install && yarn run serve
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+### data mock
+vue.config.js 配置express server
+```js
+before(app) {
 
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Lints and fixes files
-```
-yarn run lint
+}
 ```
